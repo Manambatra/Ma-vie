@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pour Toi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital,wght@0,500;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-top: #fff6f8;
+    --bg-bottom: #ffe3ea;
+    --rose: #ff5d8f;
+    --rose-soft: #ffb5c9;
+    --rose-deep: #c9184a;
+    --plum: #4a1942;
+    --gold: #f0a875;
+    --cream: #fffaf6;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background: radial-gradient(120% 100% at 50% 0%, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    font-family: 'Poppins', sans-serif;
+    color: var(--plum);
+    overflow-x: hidden;
+  }
+
+  .stage {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8vh 6vw 10vh;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--rose-deep);
+    opacity: 0.75;
+    margin-bottom: 1.6rem;
+    font-weight: 500;
+  }
+
+  /* ---------- HEART SIGNATURE ---------- */
+  .heart-wrap {
+    position: relative;
+    width: min(280px, 60vw);
+    height: min(280px, 60vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 1.4rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,93,143,0.35) 0%, rgba(255,93,143,0) 70%);
+    animation: glowPulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { transform: scale(0.85); opacity: 0.6; }
+    28% { transform: scale(1.08); opacity: 1; }
+  }
+
+  svg.heart-svg {
+    position: relative;
+    width: 78%;
+    height: 78%;
+    overflow: visible;
+    animation: beat 1.8s cubic-bezier(0.3,0,0.2,1) infinite;
+    transform-origin: center;
+  }
+
+  @keyframes beat {
+    0%   { transform: scale(1); }
+    14%  { transform: scale(1.1); }
+    22%  { transform: scale(0.98); }
+    32%  { transform: scale(1.14); }
+    42%  { transform: scale(1); }
+    100% { transform: scale(1); }
+  }
+
+  .heart-back { fill: var(--rose-soft); opacity: 0.55; }
+  .heart-front { fill: url(#heartGradient); filter: drop-shadow(0 8px 24px rgba(201,24,74,0.35)); }
+
+  .hint {
+    font-size: 0.78rem;
+    color: var(--rose-deep);
+    opacity: 0.55;
+    letter-spacing: 0.05em;
+    margin-bottom: 3rem;
+    transition: opacity 0.4s ease;
+  }
+  .hint.hide { opacity: 0; }
+
+  h1.title {
+    font-family: 'Dancing Script', cursive;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 8vw, 4.2rem);
+    color: var(--rose-deep);
+    margin: 0 0 0.6rem;
+    line-height: 1;
+  }
+
+  p.subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.4vw, 1.25rem);
+    color: var(--plum);
+    opacity: 0.8;
+    max-width: 480px;
+    margin: 0 0 2.6rem;
+  }
+
+  /* ---------- MESSAGE REVEAL ---------- */
+  .message-card {
+    max-width: 520px;
+    background: var(--cream);
+    border-radius: 20px;
+    padding: 2.6rem 2.4rem;
+    box-shadow: 0 30px 60px -20px rgba(201,24,74,0.25);
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2,0.8,0.2,1);
+    position: relative;
+  }
+  .message-card::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--rose-soft), var(--gold));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .message-card.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .message-card p {
+    font-size: 1.02rem;
+    line-height: 1.85;
+    color: var(--plum);
+    margin: 0 0 1rem;
+    font-weight: 300;
+  }
+  .message-card p:last-child { margin-bottom: 0; }
+  .signature {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.7rem;
+    color: var(--rose-deep);
+    margin-top: 1.4rem !important;
+  }
+
+  /* floating hearts */
+  .floaters {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .floater {
+    position: absolute;
+    bottom: -40px;
+    font-size: 14px;
+    color: var(--rose);
+    opacity: 0;
+    animation: rise linear forwards;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.7; }
+    100% { transform: translateY(-110vh) translateX(var(--drift, 20px)) rotate(360deg); opacity: 0; }
+  }
+
+  .stage > * { position: relative; z-index: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    svg.heart-svg, .glow { animation: none; }
+    .floater { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="floaters" id="floaters"></div>
+
+<div class="stage">
+  <div class="eyebrow">Un petit mot pour toi</div>
+
+  <div class="heart-wrap" id="heartWrap" role="button" aria-label="Toucher le cœur pour lire le message" tabindex="0">
+    <div class="glow"></div>
+    <svg class="heart-svg" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff8fb3"/>
+          <stop offset="55%" stop-color="#ff5d8f"/>
+          <stop offset="100%" stop-color="#c9184a"/>
+        </linearGradient>
+      </defs>
+      <path class="heart-back" transform="translate(4,4) scale(0.94)" d="M50 85
+        C 20 65, 0 45, 0 25
+        C 0 8, 14 -2, 28 2
+        C 38 5, 46 14, 50 22
+        C 54 14, 62 5, 72 2
+        C 86 -2, 100 8, 100 25
+        C 100 45, 80 65, 50 85 Z"/>
+      <path class="heart-front" d="M50 85
+        C 20 65, 0 45, 0 25
+        C 0 8, 14 -2, 28 2
+        C 38 5, 46 14, 50 22
+        C 54 14, 62 5, 72 2
+        C 86 -2, 100 8, 100 25
+        C 100 45, 80 65, 50 85 Z"/>
+    </svg>
+  </div>
+
+  <div class="hint" id="hint">touche le cœur ✨</div>
+
+  <h1 class="title">Pour toi</h1>
+  <p class="subtitle">celle qui rend chaque jour un peu plus lumineux</p>
+
+  <div class="message-card" id="messageCard">
+    <p>Je voulais juste que tu saches, sans raison particulière, à quel point tu comptes pour moi.</p>
+    <p>Il y a quelque chose dans ta façon de rire, de voir le monde, d'être toi tout simplement, qui rend tout plus doux autour de moi.</p>
+    <p>Alors voilà ce petit cœur, juste pour te le rappeler aujourd'hui.</p>
+    <p class="signature">Je t'aime. 💗</p>
+  </div>
+</div>
+
+<script>
+  const heartWrap = document.getElementById('heartWrap');
+  const messageCard = document.getElementById('messageCard');
+  const hint = document.getElementById('hint');
+  const floatersEl = document.getElementById('floaters');
+  let opened = false;
+
+  function spawnFloaters(count) {
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('div');
+      el.className = 'floater';
+      el.textContent = Math.random() > 0.5 ? '♥' : '✦';
+      const left = Math.random() * 100;
+      const duration = 5 + Math.random() * 4;
+      const drift = (Math.random() * 120 - 60) + 'px';
+      const size = 10 + Math.random() * 16;
+      el.style.left = left + 'vw';
+      el.style.fontSize = size + 'px';
+      el.style.setProperty('--drift', drift);
+      el.style.animationDuration = duration + 's';
+      el.style.animationDelay = (Math.random() * 1.2) + 's';
+      floatersEl.appendChild(el);
+      setTimeout(() => el.remove(), (duration + 1.5) * 1000);
+    }
+  }
+
+  function ambientFloaters() {
+    spawnFloaters(1);
+    setTimeout(ambientFloaters, 1400 + Math.random() * 1200);
+  }
+  ambientFloaters();
+
+  function openMessage() {
+    if (opened) return;
+    opened = true;
+    messageCard.classList.add('show');
+    hint.classList.add('hide');
+    spawnFloaters(18);
+  }
+
+  heartWrap.addEventListener('click', openMessage);
+  heartWrap.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') openMessage();
+  });
+</script>
+
+</body>
+</html>
